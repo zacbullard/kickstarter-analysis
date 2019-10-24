@@ -1,5 +1,5 @@
 Whatmakesforgoodcrowdfunding.ipynb
 .ipynb_checkpoints
-input
+input/*
 *.csv
 *.pyc

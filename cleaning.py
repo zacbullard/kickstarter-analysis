@@ -41,7 +41,10 @@ def clean_comments(cmdf):
     Returns:
         None
     '''
-    
+
+    #Rename columns to provide more information 
+    cmdf.rename(columns={'id':'project_id','comment_dates':'comment_date'}, inplace = True)
+
     #Remove projects whose reward dates are after our cutoff
     cmdf.drop(cmdf[cmdf.reward_date > params.end_date].index, inplace = True)
 
@@ -50,12 +53,11 @@ def clean_comments(cmdf):
     cmdf.comments = cmdf.comments.map(lambda x:[carrot_match.sub('',y.lstrip('[').rstrip(']').replace('\n', '')) for y in x])
 
     #Remove projects with an insufficient number of comments. 
-    cmdf['comment_count'] = cmdf.comments.map(lambda x: len(x))
-    cmdf.drop(cmdf[cmdf.comment_count < params.comment_cutoff].index, inplace=True) 
+    cmdf['project_comment_count'] = cmdf.comments.map(lambda x: len(x))
+    cmdf.drop(cmdf[cmdf.project_comment_count < params.comment_cutoff].index, inplace=True) 
     
     #Converting the time format to Unix Time.
-    cmdf['comment_dates'] = [[time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple()) for date in dates] for dates in cmdf.comment_dates]
-
+    cmdf['comment_date'] = [[time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple()) for date in dates] for dates in cmdf.comment_date]
      
 if __name__ == '__main__':
     start_time = time.time()    
@@ -72,8 +74,11 @@ if __name__ == '__main__':
     #Expand out the individual comments, as they are initially scraped on a per-project basis.
     cmdf = pd.DataFrame({
       col:np.repeat(cmdf[col].values, cmdf['comments'].str.len())
-      for col in cmdf.columns.drop('comments')}
-    ).assign(comments=np.concatenate(cmdf['comments'].values))
+      for col in cmdf.columns.drop('comments').drop('comment_date')}
+    ).assign(comments=np.concatenate(cmdf['comments'].values)).assign(comment_date=np.concatenate(cmdf['comment_date'].values))
+    
+    #Rearrange the dataframe to put the comments (long data) at the end.
+    cmdf = cmdf[['project_id','project_comment_count','reward_date','comment_date','comments']]
     
     #mdf = pd.merge(cmdf,ksdf, on='id',how = 'inner' )
     
