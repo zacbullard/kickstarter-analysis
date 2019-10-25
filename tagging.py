@@ -18,12 +18,11 @@ def mark_delivered_regex(cmdf):
     '''
     
     #This regex expression essentially looks for words that confirm delivery, without being preceeded by a negative.
-    delivered_regex = re.compile("(?<!not\s)(?<!hasen't\s)(?<!hasn't\s)(?<!haven't\sI\s)(?<!haven't\s)(?<!ever\s)(?<!never\s)(?<!yet\s)(recieved|received|arrived)", re.IGNORECASE)
+    delivered_regex = re.compile("(?<!not\s)(?<!not\salready\s)(?<!ain't\s)(?<!aint\s)(?<!hasen't\s)(?<!hasent\s)(?<!hasn't\s)(?<!hasnt\s)(?<!haven't\sI\s)(?<!havent\s)(?<!ever\s)(?<!never\s)(?<!yet\s)(recieved|received|arrived)(?!\snothing)(?!\sanything\?)", re.IGNORECASE)
 
     cmdf['delivered_regex'] = cmdf.comments.map(lambda x: len(delivered_regex.findall(x))>0)
     
-        #Rearrange the dataframe to put the comments (long data) at the end.
-    cmdf = cmdf[['project_id','project_comment_count','reward_date','comment_date','delivered_regex','comments']]
+
     
  
 if __name__ == '__main__':
@@ -34,6 +33,11 @@ if __name__ == '__main__':
     
     mark_delivered_regex(cmdf)
     
+    #Rearrange the dataframe to put the comments (long data) at the end.
+    cmdf = cmdf[['project_id','project_comment_count','reward_date','comment_date','delivered_regex','comments']]
+    
     cmdf.to_pickle(params.cleaned_comments_pickle)
+    
+    cmdf.to_csv(params.cleaned_comments_csv, index=False)
     
     print("Finished! In", (time.time()-start_time)/60," minutes")

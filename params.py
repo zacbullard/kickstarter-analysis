@@ -12,7 +12,7 @@ end_2016 = 1483228800
 #We will not consider projects with rewards promised beyond this date.
 end_date = end_2015
 
-#Path to the scraped kickstarter and comment files
+#Path to the scraped kickstarter and comment pickles
 if testing:
 	#Small test files
 	raw_kickstarter_pickle = "input/processed_dataframes/all_kickstarters_test"
@@ -22,7 +22,7 @@ else:
 	raw_kickstarter_pickle = "input/processed_dataframes/all_kickstarters_full"
 	raw_comments_pickle = "input/processed_dataframes/all_comments_full"
 
-#Path to safe the cleaned kickstarter and comment files
+#Path to safe the cleaned kickstarter and comment pickles
 if testing:
 	#Small test files
 	cleaned_kickstarter_pickle = "input/processed_dataframes/all_kickstarters_test_cleaned"
@@ -31,6 +31,14 @@ else:
 	#Large full files
 	cleaned_kickstarter_pickle = "input/processed_dataframes/all_kickstarters_full_cleaned"
 	cleaned_comments_pickle = "input/processed_dataframes/all_comments_full_cleaned"
+
+#Path to safe the cleaned kickstarter and comment csvs
+if testing:
+	#Small test files
+	cleaned_comments_csv = "input/processed_dataframes/all_comments_test_cleaned.csv"
+else:
+	#Large full files
+	cleaned_comments_csv = "input/processed_dataframes/all_comments_full_cleaned.csv"
 
 
 #Minimum number of comments required for a kickstarter to be considered.
