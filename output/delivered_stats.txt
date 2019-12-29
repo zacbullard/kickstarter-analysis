@@ -1,0 +1,10 @@
+STATS ON CONFIRMED DELIVERY DELAYS (MONTHS)
+ count     4.000000
+mean      6.439238
+std       8.021834
+min      -1.544021
+25%       2.202078
+50%       4.944837
+75%       9.181997
+max      17.411301
+Name: reward_delay_months, dtype: float64
